@@ -54,7 +54,7 @@ function displayResults(json) {
     while (section.firstChild) {
         section.removeChild(section.firstChild);
     }
-    
+
     let articles = json.response.docs;
 
     if (articles.length >= 10) {
@@ -67,21 +67,39 @@ function displayResults(json) {
     if (articles.length === 0) {
         console.log("No results");
     } else {
-        //Display the data
         for (let i = 0; i < articles.length; i++) {
-            let article = document.createElement('article'); //1
-            let heading = document.createElement('h2'); //2
+            let article = document.createElement('article');
+            let heading = document.createElement('h2');
             let link = document.createElement('a');
+            let para = document.createElement('p'); //1
+            let clearfix = document.createElement('div'); //2
 
-            let current = articles[i]; //2
-            console.log("Current:", current); //3
+            let current = articles[i];
+            console.log("Current:", current);
 
-            link.href = current.web_url; //4
+            link.href = current.web_url;
             link.textContent = current.headline.main;
 
-            article.appendChild(heading); //3
+            para.textContent = 'Keywords: '; //3
+
+            for (let j = 0; j < current.keywords.length; j++) {
+                //5
+                let span = document.createElement('span');
+                //6
+                span.textContent += current.keywords[j].value + ' ';
+                //7
+                para.appendChild(span);
+            }
+
+            //8
+            clearfix.setAttribute('class', 'clearfix');
+
+            //9
+            article.appendChild(heading);
             heading.appendChild(link);
-            section.appendChild(article); //4
+            article.appendChild(para);
+            article.appendChild(clearfix);
+            section.appendChild(article);
         }
     }
 };
