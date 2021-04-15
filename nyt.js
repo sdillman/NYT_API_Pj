@@ -53,6 +53,13 @@ function fetchResults(e) {
 function displayResults(json) {
     let articles = json.response.docs;
 
+    if (articles.length >= 10) {
+        nav.style.display = 'block'; //shows the nav display if 10 items are in the array
+    } else {
+        nav.style.display = 'none'; //hides the nav display if fewer than 10 items are in the array
+        // query 'The Wreckers Opera' for one item returned
+    }
+
     if (articles.length === 0) {
         console.log("No results");
     } else {
