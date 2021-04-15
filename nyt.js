@@ -71,8 +71,9 @@ function displayResults(json) {
             let article = document.createElement('article');
             let heading = document.createElement('h2');
             let link = document.createElement('a');
-            let para = document.createElement('p'); //1
-            let clearfix = document.createElement('div'); //2
+            let img = document.createElement('img'); //1
+            let para = document.createElement('p');
+            let clearfix = document.createElement('div');
 
             let current = articles[i];
             console.log("Current:", current);
@@ -83,12 +84,16 @@ function displayResults(json) {
             para.textContent = 'Keywords: '; //3
 
             for (let j = 0; j < current.keywords.length; j++) {
-                //5
                 let span = document.createElement('span');
-                //6
                 span.textContent += current.keywords[j].value + ' ';
-                //7
                 para.appendChild(span);
+            }
+
+            if (current.multimedia.length > 0) {
+                //3
+                img.src = 'http://www.nytimes.com/' + current.multimedia[0].url;
+                //4
+                img.alt = current.headline.main;
             }
 
             //8
@@ -97,6 +102,7 @@ function displayResults(json) {
             //9
             article.appendChild(heading);
             heading.appendChild(link);
+            article.appendChild(img); //5
             article.appendChild(para);
             article.appendChild(clearfix);
             section.appendChild(article);
