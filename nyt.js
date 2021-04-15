@@ -14,14 +14,15 @@ const nextBtn = document.querySelector('.next');
 const previousBtn = document.querySelector('.prev');
 const nav = document.querySelector('nav');
 
+nav.style.display = 'none'; // we don't need this until after any returns
+
+let pageNumber = 0;
+console.log('PageNumber:', pageNumber);
+// let displayNav = false;
+
 //RESULTS SECTION
 const section = document.querySelector('section');
 
-nav.style.display = 'none';
-let pageNumber = 0;
-let displayNav = false;
-
-//1                     //2   
 searchForm.addEventListener('submit', fetchResults);
 nextBtn.addEventListener('click', nextPage); //3
 previousBtn.addEventListener('click', previousPage); //3
@@ -30,10 +31,11 @@ function fetchResults(e) {
     e.preventDefault(); //1
     // Assemble the full URL
     url = baseURL + '?api-key=' + key + '&page=' + pageNumber + '&q=' + searchTerm.value; //3
+    console.log("URL: ", url);
 
     //INSERT HERE  
     if (startDate.value !== '') {
-        console.log(startDate.value)
+        console.log(startDate.value);
         url += '&begin_date=' + startDate.value;
     };
 
@@ -56,11 +58,20 @@ function displayResults(json) {
     }
 
     let articles = json.response.docs;
+    console.log("ARTICLES.LENGTH: " + articles.length);
 
     if (articles.length >= 10) {
         nav.style.display = 'block'; //shows the nav display if 10 items are in the array
+        if (pageNumber === 0) {
+            // HIDE PREV BUTTON SHOW NEXT BUTTON
+            console.log("HIDE PREV BUTTON SHOW NEXT BUTTON");
+        }
+    } else if (articles.length < 10 && pageNumber > 0) {
+        // SHOW PREV BUTTON HIDE NEXT BUTTON
+        console.log("SHOW PREV BUTTON HIDE NEXT BUTTON");
+
     } else {
-        nav.style.display = 'none'; //hides the nav display if fewer than 10 items are in the array
+        nav.style.display = 'none'; //hides the nav display if 10 or fewer items are in the array
         // query 'The Wreckers Opera' for one item returned
     }
 
@@ -80,7 +91,6 @@ function displayResults(json) {
 
             link.href = current.web_url;
             link.textContent = current.headline.main;
-
             para.textContent = 'Keywords: '; //3
 
             for (let j = 0; j < current.keywords.length; j++) {
@@ -110,10 +120,18 @@ function displayResults(json) {
     }
 };
 
-function nextPage() {
-    console.log("Next button clicked");
-} //5
+function nextPage(e) {
+    pageNumber++; //1
+    fetchResults(e); //2
+    console.log("Page number:", pageNumber); //3
+};
 
-function previousPage() {
-    console.log("Next button clicked");
-} //5
+function previousPage(e) {
+    if (pageNumber > 0) { //1
+        pageNumber--; //2
+    } else {
+        return; //3
+    }
+    fetchResults(e); //4
+    console.log("Page:", pageNumber); //5
+};
