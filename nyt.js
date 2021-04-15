@@ -32,24 +32,39 @@ function fetchResults(e) {
     url = baseURL + '?api-key=' + key + '&page=' + pageNumber + '&q=' + searchTerm.value; //3
 
     //INSERT HERE  
-    if(startDate.value !== '') {
+    if (startDate.value !== '') {
         console.log(startDate.value)
-    url += '&begin_date=' + startDate.value;
+        url += '&begin_date=' + startDate.value;
     };
 
-    if(endDate.value !== '') {
-    url += '&end_date=' + endDate.value;
+    if (endDate.value !== '') {
+        url += '&end_date=' + endDate.value;
     };
     //END HERE
 
-    fetch(url)
-        .then(function (result) {
-            console.log(result)
-            return result.json(); //2
-        }).then(function (json) {
-            console.log(json); //3
-        });
+    fetch(url).then(function (result) {
+        return result.json();
+    }).then(function (json) {
+        displayResults(json); //1 & //3
+    });
 }
+
+//2
+function displayResults(json) {
+    let articles = json.response.docs;
+    if (articles.length === 0) {
+        console.log("No results");
+    } else {
+        //Display the data
+        for (let i = 0; i < articles.length; i++) {
+            let article = document.createElement('article'); //1
+            let heading = document.createElement('h2'); //2
+
+            article.appendChild(heading); //3
+            section.appendChild(article); //4
+        }
+    }
+};
 
 function nextPage() {
     console.log("Next button clicked");
