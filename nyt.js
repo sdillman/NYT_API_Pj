@@ -51,6 +51,10 @@ function fetchResults(e) {
 
 //2
 function displayResults(json) {
+    while (section.firstChild) {
+        section.removeChild(section.firstChild);
+    }
+    
     let articles = json.response.docs;
 
     if (articles.length >= 10) {
