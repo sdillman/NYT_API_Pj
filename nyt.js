@@ -52,6 +52,7 @@ function fetchResults(e) {
 //2
 function displayResults(json) {
     let articles = json.response.docs;
+
     if (articles.length === 0) {
         console.log("No results");
     } else {
@@ -59,8 +60,16 @@ function displayResults(json) {
         for (let i = 0; i < articles.length; i++) {
             let article = document.createElement('article'); //1
             let heading = document.createElement('h2'); //2
+            let link = document.createElement('a');
+
+            let current = articles[i]; //2
+            console.log("Current:", current); //3
+
+            link.href = current.web_url; //4
+            link.textContent = current.headline.main;
 
             article.appendChild(heading); //3
+            heading.appendChild(link);
             section.appendChild(article); //4
         }
     }
